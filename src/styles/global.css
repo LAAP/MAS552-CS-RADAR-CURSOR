@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+.katex {
+  color: inherit;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  min-height: 100svh;
+}
