@@ -4,6 +4,10 @@
   color: inherit;
 }
 
+.katex-display {
+  margin: 0;
+}
+
 html,
 body,
 #root {

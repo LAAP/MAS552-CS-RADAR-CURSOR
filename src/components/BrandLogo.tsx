@@ -3,6 +3,24 @@ import type { RadarConfig } from '../types/radar'
 /** Bundled default; override with `branding.logoSrc` (URL or `/public` path). */
 export const DEFAULT_BRANDING_LOGO_PATH = '/city-intelligence-lab-logo.png'
 
+function resolveLogoSrc(input: string): string {
+  const src = input.trim()
+  if (!src) return input
+
+  // Keep fully-qualified URLs and data/blob URIs untouched.
+  if (/^(?:[a-z]+:)?\/\//i.test(src) || src.startsWith('data:') || src.startsWith('blob:')) {
+    return src
+  }
+
+  // Interpret absolute paths as app-base-relative so deployments under /radar work.
+  if (src.startsWith('/')) {
+    const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+    return `${base}/${src.replace(/^\/+/, '')}`
+  }
+
+  return src
+}
+
 type Props = {
   config: RadarConfig
   /** Light theme needs a slight shadow so a white mark stays visible */
@@ -16,7 +34,7 @@ export function BrandLogo({ config, isDarkTheme }: Props) {
   const b = config.branding
   if (b?.showLogo === false) return null
 
-  const src = b?.logoSrc?.trim() || DEFAULT_BRANDING_LOGO_PATH
+  const src = resolveLogoSrc(b?.logoSrc?.trim() || DEFAULT_BRANDING_LOGO_PATH)
   const maxW = b?.logoMaxWidthPx ?? 120
   const opacity = b?.logoOpacity ?? 1
 

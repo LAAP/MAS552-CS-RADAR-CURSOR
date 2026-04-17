@@ -2,7 +2,6 @@ import { forwardRef, useMemo } from 'react'
 import type { RadarConfig } from '../types/radar'
 import { RadarGrid } from './RadarGrid'
 import { RadarDatasetPaths } from './RadarDatasetPaths'
-import { RadarLabels } from './RadarLabels'
 import {
   RadarSectionArcs,
   RadarSectionTitleTexts,
@@ -17,12 +16,6 @@ type Props = {
   config: RadarConfig
   width: number
   height: number
-  onLabelOffsetChange?: (
-    axisId: string,
-    offset: { dx: number; dy: number },
-  ) => void
-  draggingAxisId?: string | null
-  setDraggingAxisId?: (id: string | null) => void
 }
 
 /**
@@ -31,14 +24,7 @@ type Props = {
  */
 export const RadarChartCanvas = forwardRef<SVGSVGElement, Props>(
   function RadarChartCanvas(
-    {
-      config,
-      width,
-      height,
-      onLabelOffsetChange,
-      draggingAxisId,
-      setDraggingAxisId,
-    },
+    { config, width, height },
     ref,
   ) {
     const cx = config.centerX ?? width / 2
@@ -112,18 +98,6 @@ export const RadarChartCanvas = forwardRef<SVGSVGElement, Props>(
           cy={cy}
           arcRadius={dataRadius}
         />
-        {n > 0 ? (
-          <RadarLabels
-            config={config}
-            cx={cx}
-            cy={cy}
-            plotOuterRadius={dataRadius}
-            fontSize={fontSize}
-            onLabelOffsetChange={onLabelOffsetChange}
-            draggingAxisId={draggingAxisId}
-            setDraggingAxisId={setDraggingAxisId}
-          />
-        ) : null}
         <RadarSectionTitleTexts
           config={config}
           cx={cx}
