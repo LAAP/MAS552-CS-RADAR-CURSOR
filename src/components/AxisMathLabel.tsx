@@ -1,4 +1,5 @@
-import { BlockMath, InlineMath } from 'react-katex'
+import katex from 'katex'
+import { useEffect, useRef } from 'react'
 import type { LabelLayout } from '../utils/textLayout'
 
 type Props = {
@@ -52,7 +53,7 @@ export function AxisMathLabel({
             opacity: 0.92,
           }}
         >
-          <InlineMath math={kpiTex} renderError={() => <span>{kpiTex}</span>} />
+          <KatexMath math={kpiTex} displayMode={false} />
         </div>
       ) : null}
       {showMath && formulaTex ? (
@@ -64,9 +65,46 @@ export function AxisMathLabel({
             opacity: 0.88,
           }}
         >
-          <BlockMath math={formulaTex} renderError={() => <span>{formulaTex}</span>} />
+          <KatexMath math={formulaTex} displayMode />
         </div>
       ) : null}
     </div>
+  )
+}
+
+type KatexMathProps = {
+  math: string
+  displayMode: boolean
+}
+
+function KatexMath({ math, displayMode }: KatexMathProps) {
+  const hostRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const host = hostRef.current
+    if (!host) return
+
+    try {
+      host.textContent = ''
+      katex.render(math, host, {
+        displayMode,
+        strict: 'ignore',
+        throwOnError: true,
+      })
+    } catch {
+      host.textContent = math
+    }
+  }, [displayMode, math])
+
+  return (
+    <div
+      ref={hostRef}
+      style={{
+        display: 'block',
+        position: 'relative',
+        width: '100%',
+        overflow: 'visible',
+      }}
+    />
   )
 }

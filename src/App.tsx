@@ -3,6 +3,7 @@ import { ControlPanel } from './components/ControlPanel'
 import { ExportButtons } from './components/ExportButtons'
 import { JsonEditor } from './components/JsonEditor'
 import { BrandLogo } from './components/BrandLogo'
+import { RadarLabelsOverlay } from './components/RadarLabelsOverlay'
 import { RadarChartCanvas } from './components/RadarChartCanvas'
 import { RadarLegend } from './components/RadarLegend'
 import { SavedVersionsMenu } from './components/SavedVersionsMenu'
@@ -225,6 +226,11 @@ export default function App() {
           >
             <RadarChartCanvas
               ref={svgRef}
+              config={renderConfig}
+              width={previewSize.w}
+              height={previewSize.h}
+            />
+            <RadarLabelsOverlay
               config={renderConfig}
               width={previewSize.w}
               height={previewSize.h}
